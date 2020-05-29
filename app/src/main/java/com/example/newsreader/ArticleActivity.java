@@ -20,6 +20,6 @@ public class ArticleActivity extends AppCompatActivity {
         webView.setWebViewClient(new WebViewClient());
 
         Intent intent = getIntent();
-        webView.loadData(intent.getStringExtra("content"), "text/html", "UTF-8");
+        webView.loadUrl(intent.getStringExtra("url"));
     }
 }

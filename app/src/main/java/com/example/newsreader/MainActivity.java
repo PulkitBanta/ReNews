@@ -26,7 +26,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     ArrayList<String> titles = new ArrayList<>();
-    ArrayList<String> content = new ArrayList<>();
+    ArrayList<String> urls = new ArrayList<>();
 
     ArrayAdapter<String> arrayAdapter;
 
@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         articlesDB = this.openOrCreateDatabase("Articles", MODE_PRIVATE, null);
 
         // creating a table in the database with column names
-        articlesDB.execSQL("CREATE TABLE IF NOT EXISTS articles (id INTEGER PRIMARY KEY, articleID, INTEGER, title VARCHAR, content VARCHAR)");
+        articlesDB.execSQL("CREATE TABLE IF NOT EXISTS articles (id INTEGER PRIMARY KEY, articleID INTEGER, title VARCHAR, url VARCHAR)");
 
 
         // Downloading the articles in the background
@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getApplicationContext(), ArticleActivity.class);
-                intent.putExtra("content", content.get(position));
+                intent.putExtra("url", urls.get(position));
 
                 startActivity(intent);
             }
@@ -72,16 +72,16 @@ public class MainActivity extends AppCompatActivity {
     public void updateListView() {
         Cursor c = articlesDB.rawQuery("SELECT * FROM articles", null);
 
-        int contentIndex = c.getColumnIndex("content");
+        int urlsIndex = c.getColumnIndex("url");
         int titleIndex = c.getColumnIndex("title");
 
         if(c.moveToFirst()) {
             titles.clear();
-            content.clear();
+            urls.clear();
 
             do {
                 titles.add(c.getString(titleIndex));
-                content.add(c.getString(contentIndex));
+                urls.add(c.getString(urlsIndex));
             } while(c.moveToNext());
 
             arrayAdapter.notifyDataSetChanged();
@@ -122,7 +122,12 @@ public class MainActivity extends AppCompatActivity {
                 // Clearing Database
                 articlesDB.execSQL("DELETE FROM articles");
 
-                for (int i = 0; i < jsonArray.length(); i++) {
+                int newsLength = 10;
+
+                if(newsLength > jsonArray.length())
+                    newsLength = jsonArray.length();
+
+                for (int i = 0; i < newsLength; i++) {
                     // Getting Particular News from id
                     String articleId = jsonArray.getString(i);
 
@@ -153,31 +158,12 @@ public class MainActivity extends AppCompatActivity {
                         String articleUrl = obj.getString("url");
                         String articleTitle = obj.getString("title");
 
-                        Log.i("title", articleTitle);
-
-                        url = new URL(articleUrl);
-                        httpURLConnection = (HttpURLConnection) url.openConnection();
-
-                        inputStream = httpURLConnection.getInputStream();
-                        reader = new InputStreamReader(inputStream);
-
-                        String articleContent = "";
-                        data = reader.read();
-
-                        // reading the data received by the API
-                        while(data != -1) {
-                            char inputData = (char) data;
-                            articleContent += inputData;
-
-                            data = reader.read();
-                        }
-
                         // adding data to the SQL table
-                        String sql = "INSERT INTO articles (articleID, title, content) VALUES (?, ?, ?)";
+                        String sql = "INSERT INTO articles (articleID, title, url) VALUES (?, ?, ?)";
                         SQLiteStatement statement = articlesDB.compileStatement(sql);
                         statement.bindString(1, articleId);
                         statement.bindString(2, articleTitle);
-                        statement.bindString(3, articleContent);
+                        statement.bindString(3, articleUrl);
 
                         statement.execute();
                     }
