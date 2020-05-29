@@ -2,11 +2,15 @@ package com.example.newsreader;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -21,7 +25,9 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    ArrayList<String> arrayList = new ArrayList<>();
+    ArrayList<String> titles = new ArrayList<>();
+    ArrayList<String> content = new ArrayList<>();
+
     ArrayAdapter<String> arrayAdapter;
 
     SQLiteDatabase articlesDB;
@@ -37,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
         // creating a table in the database with column names
         articlesDB.execSQL("CREATE TABLE IF NOT EXISTS articles (id INTEGER PRIMARY KEY, articleID, INTEGER, title VARCHAR, content VARCHAR)");
 
+
         // Downloading the articles in the background
         DownloadTask task = new DownloadTask();
         try {
@@ -46,10 +53,40 @@ public class MainActivity extends AppCompatActivity {
         }
 
         ListView listView = findViewById(R.id.listView);
-
-        arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, arrayList);
-
+        arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, titles);
         listView.setAdapter(arrayAdapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getApplicationContext(), ArticleActivity.class);
+                intent.putExtra("content", content.get(position));
+
+                startActivity(intent);
+            }
+        });
+
+        updateListView();
+    }
+
+    public void updateListView() {
+        Cursor c = articlesDB.rawQuery("SELECT * FROM articles", null);
+
+        int contentIndex = c.getColumnIndex("content");
+        int titleIndex = c.getColumnIndex("title");
+
+        if(c.moveToFirst()) {
+            titles.clear();
+            content.clear();
+
+            do {
+                titles.add(c.getString(titleIndex));
+                content.add(c.getString(contentIndex));
+            } while(c.moveToNext());
+
+            arrayAdapter.notifyDataSetChanged();
+        }
+        c.close();
     }
 
     public class DownloadTask extends AsyncTask<String, Void, String> {
@@ -82,6 +119,9 @@ public class MainActivity extends AppCompatActivity {
                 // Response as Array of News Id
                 JSONArray jsonArray = new JSONArray(res);
 
+                // Clearing Database
+                articlesDB.execSQL("DELETE FROM articles");
+
                 for (int i = 0; i < jsonArray.length(); i++) {
                     // Getting Particular News from id
                     String articleId = jsonArray.getString(i);
@@ -113,6 +153,8 @@ public class MainActivity extends AppCompatActivity {
                         String articleUrl = obj.getString("url");
                         String articleTitle = obj.getString("title");
 
+                        Log.i("title", articleTitle);
+
                         url = new URL(articleUrl);
                         httpURLConnection = (HttpURLConnection) url.openConnection();
 
@@ -130,8 +172,6 @@ public class MainActivity extends AppCompatActivity {
                             data = reader.read();
                         }
 
-                        Log.i("Html Content", articleContent);
-
                         // adding data to the SQL table
                         String sql = "INSERT INTO articles (articleID, title, content) VALUES (?, ?, ?)";
                         SQLiteStatement statement = articlesDB.compileStatement(sql);
@@ -142,15 +182,20 @@ public class MainActivity extends AppCompatActivity {
                         statement.execute();
                     }
                 }
-
-//                Log.i("Response Data", res);
-
                 return res;
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            updateListView();
         }
     }
 }
