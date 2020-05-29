@@ -2,6 +2,7 @@ package com.example.newsreader;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,13 +23,21 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<String> arrayList = new ArrayList<>();
     ArrayAdapter<String> arrayAdapter;
 
+    SQLiteDatabase articlesDB;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        DownloadTask task = new DownloadTask();
+        // creating a new database
+        articlesDB = this.openOrCreateDatabase("Articles", MODE_PRIVATE, null);
 
+        // creating a table in the database with column names
+        articlesDB.execSQL("CREATE TABLE IF NOT EXISTS articles (id INTEGER PRIMARY KEY, articleID, INTEGER, title VARCHAR, content VARCHAR)");
+
+        // Downloading the articles in the background
+        DownloadTask task = new DownloadTask();
         try {
             task.execute("https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty");
         } catch (Exception e) {
@@ -97,8 +106,30 @@ public class MainActivity extends AppCompatActivity {
                     JSONObject obj = new JSONObject(articleInfo);
 
                     // data of the article is not null
-                    if(obj.isNull("title") && obj.isNull("url")) {
-                        Log.i("String title and url", obj.getString("title") + " " + obj.getString("url"));
+                    if(!obj.isNull("title") && !obj.isNull("url")) {
+
+                        // url received from the API
+                        String articleUrl = obj.getString("url");
+
+                        Log.i("Article title", obj.getString("title"));
+                        url = new URL(articleUrl);
+                        httpURLConnection = (HttpURLConnection) url.openConnection();
+
+                        inputStream = httpURLConnection.getInputStream();
+                        reader = new InputStreamReader(inputStream);
+
+                        String articleContent = "";
+                        data = reader.read();
+
+                        // reading the data received by the API
+                        while(data != -1) {
+                            char inputData = (char) data;
+                            articleContent += inputData;
+
+                            data = reader.read();
+                        }
+
+                        Log.i("Html Content", articleContent);
                     }
                 }
 
