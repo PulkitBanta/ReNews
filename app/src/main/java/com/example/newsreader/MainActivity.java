@@ -3,6 +3,7 @@ package com.example.newsreader;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteStatement;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -110,8 +111,8 @@ public class MainActivity extends AppCompatActivity {
 
                         // url received from the API
                         String articleUrl = obj.getString("url");
+                        String articleTitle = obj.getString("title");
 
-                        Log.i("Article title", obj.getString("title"));
                         url = new URL(articleUrl);
                         httpURLConnection = (HttpURLConnection) url.openConnection();
 
@@ -130,6 +131,15 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                         Log.i("Html Content", articleContent);
+
+                        // adding data to the SQL table
+                        String sql = "INSERT INTO articles (articleID, title, content) VALUES (?, ?, ?)";
+                        SQLiteStatement statement = articlesDB.compileStatement(sql);
+                        statement.bindString(1, articleId);
+                        statement.bindString(2, articleTitle);
+                        statement.bindString(3, articleContent);
+
+                        statement.execute();
                     }
                 }
 
