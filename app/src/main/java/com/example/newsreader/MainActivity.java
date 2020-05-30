@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     SQLiteDatabase articlesDB;
     ListView listView;
     ProgressBar progressBar;
+    TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
         arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, titles);
         listView.setAdapter(arrayAdapter);
         progressBar = findViewById(R.id.progressBar);
+        textView = findViewById(R.id.textView);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -69,13 +72,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        updateListView();
+        checkList();
     }
 
     public void checkList() {
-        if (titles.size() == 0)
+        if(titles.size() > 0) {
+            progressBar.setVisibility(View.GONE);
+            textView.setText("Today's top 30 News");
+        } else {
             progressBar.setVisibility(View.VISIBLE);
-        else  progressBar.setVisibility(View.GONE);
+        }
     }
 
     public void updateListView() {

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">News Reader</string>
+    <string name="loading">Fetching latest News</string>
 </resources>
