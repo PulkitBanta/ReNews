@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-public class ArticleActivity extends AppCompatActivity {
+public class ArticleActivity extends WebViewClient {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

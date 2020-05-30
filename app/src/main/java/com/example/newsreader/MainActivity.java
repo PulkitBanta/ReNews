@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
                 // Clearing Database
                 articlesDB.execSQL("DELETE FROM articles");
 
-                int newsLength = 10;
+                int newsLength = 20;
 
                 if(newsLength > jsonArray.length())
                     newsLength = jsonArray.length();
