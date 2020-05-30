@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -29,8 +30,9 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<String> urls = new ArrayList<>();
 
     ArrayAdapter<String> arrayAdapter;
-
     SQLiteDatabase articlesDB;
+    ListView listView;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,9 +54,10 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        ListView listView = findViewById(R.id.listView);
+        listView = findViewById(R.id.listView);
         arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, titles);
         listView.setAdapter(arrayAdapter);
+        progressBar = findViewById(R.id.progressBar);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -67,6 +70,12 @@ public class MainActivity extends AppCompatActivity {
         });
 
         updateListView();
+    }
+
+    public void checkList() {
+        if (titles.size() == 0)
+            progressBar.setVisibility(View.VISIBLE);
+        else  progressBar.setVisibility(View.GONE);
     }
 
     public void updateListView() {
@@ -87,6 +96,8 @@ public class MainActivity extends AppCompatActivity {
             arrayAdapter.notifyDataSetChanged();
         }
         c.close();
+
+        checkList();
     }
 
     public class DownloadTask extends AsyncTask<String, Void, String> {
