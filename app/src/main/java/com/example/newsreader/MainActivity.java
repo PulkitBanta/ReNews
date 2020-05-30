@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -200,5 +199,8 @@ public class MainActivity extends AppCompatActivity {
 
             updateListView();
         }
+    }
+
+    public static class SplashActivity {
     }
 }
