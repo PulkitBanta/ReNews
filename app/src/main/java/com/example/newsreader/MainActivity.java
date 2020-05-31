@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -28,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
 
     ArrayList<String> titles = new ArrayList<>();
     ArrayList<String> urls = new ArrayList<>();
+    ArrayList<String> fav = new ArrayList<>();
+    ArrayList<String> favUrl = new ArrayList<>();
 
     ArrayAdapter<String> arrayAdapter;
     SQLiteDatabase articlesDB;
@@ -71,7 +74,25 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                fav.add(titles.get(position));
+                favUrl.add(urls.get(position));
+
+                Toast.makeText(MainActivity.this, "Item added to favourites", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
+
         checkList();
+    }
+
+    public void fav(View view) {
+        Intent intent = new Intent(getApplicationContext(), FavouriteNewsActivity.class);
+        intent.putExtra("favItems", fav);
+        intent.putExtra("favUrls", favUrl);
+        startActivity(intent);
     }
 
     public void checkList() {

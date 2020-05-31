@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">ReNEWS</string>
     <string name="loading">Fetching News . . .</string>
+    <string name="fav">Favourites</string>
 </resources>
