@@ -200,7 +200,4 @@ public class MainActivity extends AppCompatActivity {
             updateListView();
         }
     }
-
-    public static class SplashActivity {
-    }
 }
