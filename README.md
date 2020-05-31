@@ -1,5 +1,5 @@
-# NewsR
-NewsR is a news app that selects latest and best top 30 news from HackerNews. It provides you a list of the top 30 news. Get updated with the latest news and current affairs in a jiffy!
+# ReNEWS
+ReNEWS is a news app that selects latest and best top 30 news from HackerNews. It provides you a list of the top 30 news. Get updated with the latest news and current affairs in a jiffy!
 
 ### Building app with Android Studio
 
