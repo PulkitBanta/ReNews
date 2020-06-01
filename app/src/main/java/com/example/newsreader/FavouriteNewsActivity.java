@@ -56,7 +56,7 @@ public class FavouriteNewsActivity extends AppCompatActivity {
                 urls.remove(position);
 
                 arrayAdapter.notifyDataSetChanged();
-                Toast.makeText(FavouriteNewsActivity.this, "Removed from favourites", Toast.LENGTH_SHORT).show();
+                Toast.makeText(FavouriteNewsActivity.this, "Item Removed", Toast.LENGTH_SHORT).show();
                 return true;
             }
         });
