@@ -1,7 +1,6 @@
 ![ReNEWS](Design/logo.png "ReNEWS")
 
-
-ReNEWS is a news app that selects latest and best top 30 dev news from HackerNews. It provides you a list of the top 30 news. Get updated with the latest news and current affairs in a jiffy!
+ReNEWS is a news app that selects the latest and best top 30 dev news from HackerNews. It provides you a list of the top 30 news. Get updated with the latest news and current affairs in a jiffy!
 
 ### Building app with Android Studio
 
@@ -15,7 +14,7 @@ ReNEWS is a news app that selects latest and best top 30 dev news from HackerNew
 
 * [Android Studio](https://developer.android.com/) - Android Studio provides the fastest tools for building apps on every type of Android device.
 * [Java](https://www.java.com/en/) - ava is a general-purpose programming language that is class-based, object-oriented, and designed to have as few implementation dependencies as possible.
-* [HackerNews API](https://github.com/HackerNews/API)
+* [HackerNews API](https://github.com/HackerNews/API) - REST API for NEWS.
 
 ## Coming soon
 
