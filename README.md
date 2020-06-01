@@ -1,4 +1,4 @@
-![ReNEWS](design/logo.png "ReNEWS")
+![ReNEWS](Design/logo.png "ReNEWS")
 ReNEWS is a news app that selects latest and best top 30 news from HackerNews. It provides you a list of the top 30 news. Get updated with the latest news and current affairs in a jiffy!
 
 ### Building app with Android Studio
@@ -7,7 +7,7 @@ ReNEWS is a news app that selects latest and best top 30 news from HackerNews. I
 * Open Android Studio and open the project.
 
 ## ScreenShots
-![Home](screenshots/main.png)
+![Home](Screenshots/main.png)
 
 ## Built With
 
