@@ -11,7 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
-        <activity android:name=".FavouriteNewsActivity"></activity>
+        <activity android:name=".FavouriteNewsActivity" />
         <activity
             android:name=".SplashActivity"
             android:theme="@style/SplashTheme">
