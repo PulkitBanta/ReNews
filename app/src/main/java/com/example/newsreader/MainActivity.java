@@ -29,11 +29,9 @@ public class MainActivity extends AppCompatActivity {
 
     ArrayList<String> titles = new ArrayList<>();
     ArrayList<String> urls = new ArrayList<>();
-    ArrayList<String> fav = new ArrayList<>();
-    ArrayList<String> favUrl = new ArrayList<>();
 
     ArrayAdapter<String> arrayAdapter;
-    SQLiteDatabase articlesDB;
+    static SQLiteDatabase articlesDB;
     ListView listView;
     ProgressBar progressBar;
     TextView textView;
@@ -48,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
         // creating a table in the database with column names
         articlesDB.execSQL("CREATE TABLE IF NOT EXISTS articles (id INTEGER PRIMARY KEY, articleID INTEGER, title VARCHAR, url VARCHAR)");
-
+        articlesDB.execSQL("CREATE TABLE IF NOT EXISTS favourites (id INTEGER PRIMARY KEY, title VARCHAR, url VARCHAR)");
 
         // Downloading the articles in the background
         DownloadTask task = new DownloadTask();
@@ -77,8 +75,16 @@ public class MainActivity extends AppCompatActivity {
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                fav.add(titles.get(position));
-                favUrl.add(urls.get(position));
+                String title = titles.get(position);
+                String url = urls.get(position);
+
+                // adding data to the SQL table
+                String sql = "INSERT INTO favourites (title, url) VALUES (?, ?)";
+                SQLiteStatement statement = articlesDB.compileStatement(sql);
+                statement.bindString(1, title);
+                statement.bindString(2, url);
+
+                statement.execute();
 
                 Toast.makeText(MainActivity.this, "Item added to favourites", Toast.LENGTH_SHORT).show();
                 return true;
@@ -90,8 +96,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void fav(View view) {
         Intent intent = new Intent(getApplicationContext(), FavouriteNewsActivity.class);
-        intent.putExtra("favItems", fav);
-        intent.putExtra("favUrls", favUrl);
         startActivity(intent);
     }
 

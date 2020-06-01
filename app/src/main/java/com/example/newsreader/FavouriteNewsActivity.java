@@ -3,6 +3,8 @@ package com.example.newsreader;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -16,19 +18,17 @@ import java.util.Objects;
 public class FavouriteNewsActivity extends AppCompatActivity {
 
     ListView listView;
-    ArrayAdapter arrayAdapter;
-    ArrayList<String> titles;
-    ArrayList<String> urls;
+    ArrayAdapter<String> arrayAdapter;
+    SQLiteDatabase database;
+    ArrayList<String> titles = new ArrayList<>();
+    ArrayList<String> urls = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favourite_news);
 
-        Intent intent = getIntent();
-
-        titles = new ArrayList<String>(Objects.requireNonNull(intent.getStringArrayListExtra("favItems")));
-        urls = new ArrayList<String>(Objects.requireNonNull(intent.getStringArrayListExtra("favUrls")));
+        database = MainActivity.articlesDB;
 
         listView = findViewById(R.id.listView);
         arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, titles);
@@ -37,26 +37,54 @@ public class FavouriteNewsActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent urlIntent = new Intent(getApplicationContext(), ArticleActivity.class);
-                urlIntent.putExtra("url", urls.get(position));
-                startActivity(urlIntent);
+                Intent intent = new Intent(getApplicationContext(), ArticleActivity.class);
+                intent.putExtra("url", urls.get(position));
+
+                startActivity(intent);
             }
         });
 
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
+                String[] whereArgs = {titles.get(position)};
+
+                database.delete("favourites", "title=?", whereArgs);
+
                 titles.remove(position);
                 urls.remove(position);
 
                 arrayAdapter.notifyDataSetChanged();
-                Toast.makeText(FavouriteNewsActivity.this, "Item deleted from favourites", Toast.LENGTH_SHORT).show();
+                Toast.makeText(FavouriteNewsActivity.this, "Removed from favourites", Toast.LENGTH_SHORT).show();
                 return true;
             }
         });
+
+        updateListView();
     }
 
     public void back(View view) {
         finish();
+    }
+
+    public void updateListView() {
+        Cursor c = database.rawQuery("SELECT * FROM favourites", null);
+
+        int urlsIndex = c.getColumnIndex("url");
+        int titleIndex = c.getColumnIndex("title");
+
+        if (c.moveToFirst()) {
+            titles.clear();
+            urls.clear();
+
+            do {
+                titles.add(c.getString(titleIndex));
+                urls.add(c.getString(urlsIndex));
+            } while (c.moveToNext());
+
+            arrayAdapter.notifyDataSetChanged();
+        }
+        c.close();
     }
 }
