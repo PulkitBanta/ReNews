@@ -29,9 +29,12 @@ ReNEWS is a news app that selects the latest and best top 30 dev news from Hacke
 
 Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
 
-## Authors
+## Contributors
 
-* **Pulkit Banta** - *Initial work* - [PulkitBanta](https://github.com/PulkitBanta)
+| [![Pulkit Banta](https://github.com/PulkitBanta.png?size=100)](https://github.com/PulkitBanta) |
+| --- |
+| [Pulkit Banta](https://github.com/PulkitBanta) |
+| <p align="center"><a title="code">💻</a> <a title="designing">🎨</a> <a title="documentation">📖</a></p>
 
 ## License
 
