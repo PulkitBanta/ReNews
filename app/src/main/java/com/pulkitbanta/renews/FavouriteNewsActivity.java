@@ -1,4 +1,4 @@
-package com.example.newsreader;
+package com.pulkitbanta.renews;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -13,7 +13,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class FavouriteNewsActivity extends AppCompatActivity {
 

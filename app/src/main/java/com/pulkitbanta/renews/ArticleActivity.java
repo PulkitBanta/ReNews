@@ -1,6 +1,4 @@
-package com.example.newsreader;
-
-import androidx.appcompat.app.AppCompatActivity;
+package com.pulkitbanta.renews;
 
 import android.content.Intent;
 import android.graphics.Bitmap;

@@ -1,4 +1,4 @@
-package com.example.newsreader;
+package com.pulkitbanta.renews;
 
 import org.junit.Test;
 

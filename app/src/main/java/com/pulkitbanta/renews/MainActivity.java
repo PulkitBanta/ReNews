@@ -1,4 +1,4 @@
-package com.example.newsreader;
+package com.pulkitbanta.renews;
 
 import androidx.appcompat.app.AppCompatActivity;
 

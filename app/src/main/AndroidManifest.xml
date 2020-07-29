@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.newsreader">
+    package="com.pulkitbanta.renews">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -11,9 +11,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
-        <activity android:name=".FavouriteNewsActivity" />
+        <activity android:name="com.pulkitbanta.renews.FavouriteNewsActivity" />
         <activity
-            android:name=".SplashActivity"
+            android:name="com.pulkitbanta.renews.SplashActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,8 +21,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ArticleActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name="com.pulkitbanta.renews.ArticleActivity" />
+        <activity android:name="com.pulkitbanta.renews.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
